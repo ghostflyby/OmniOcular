@@ -14,7 +14,7 @@ import me.exz.omniocular.reference.Reference;
 import java.util.Map;
 
 @SuppressWarnings({"UnusedParameters", "UnusedDeclaration"})
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, dependencies = "required-after:Waila;required-after:NotEnoughItems")
+@Mod(modid = Tags.MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:Waila;required-after:NotEnoughItems")
 
 public class OmniOcular {
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
@@ -47,7 +47,7 @@ public class OmniOcular {
 
     @NetworkCheckHandler
     public static boolean check(Map<String, String> remote, Side side) {
-        return !(side == Side.SERVER && !remote.isEmpty() && !remote.containsKey(Reference.MOD_ID));
+        return !(side == Side.SERVER && !remote.isEmpty() && !remote.containsKey(Tags.MODID));
     }
 
 

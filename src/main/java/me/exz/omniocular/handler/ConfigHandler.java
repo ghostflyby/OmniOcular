@@ -2,6 +2,7 @@ package me.exz.omniocular.handler;
 
 import cpw.mods.fml.common.Loader;
 import me.exz.omniocular.OmniOcular;
+import me.exz.omniocular.Tags;
 import me.exz.omniocular.reference.Reference;
 import me.exz.omniocular.util.LogHelper;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +40,7 @@ public class ConfigHandler {
     private static File configDir;
 
     public static void initConfigFiles() {
-        configDir = new File(minecraftConfigDirectory, Reference.MOD_ID);
+        configDir = new File(minecraftConfigDirectory, Tags.MODID);
         if (!configDir.exists()) {
             if (!configDir.mkdir()) {
                 LogHelper.fatal("Can't create config folder");
@@ -96,7 +97,7 @@ public class ConfigHandler {
 
     public static void mergeConfig() {
         mergedConfig = "";
-        File configDir = new File(minecraftConfigDirectory, Reference.MOD_ID);
+        File configDir = new File(minecraftConfigDirectory, Tags.MODID);
         File[] configFiles = configDir.listFiles();
         if (configFiles != null) {
             for (File configFile : configFiles) {
