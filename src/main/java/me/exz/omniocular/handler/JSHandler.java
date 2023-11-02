@@ -1,5 +1,6 @@
 package me.exz.omniocular.handler;
 
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import me.exz.omniocular.util.LogHelper;
 import me.exz.omniocular.util.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +11,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -185,9 +188,9 @@ public class JSHandler {
     public static String translate(String t) {
         return StatCollector.translateToLocal(t);
     }
-    
+
     public static String translateFormatted(String t, Object[] format) {
-    	return StatCollector.translateToLocalFormatted(t, format);
+        return StatCollector.translateToLocalFormatted(t, format);
     }
 
     public static String playerHolding() {
