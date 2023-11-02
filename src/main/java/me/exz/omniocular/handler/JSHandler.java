@@ -1,6 +1,5 @@
 package me.exz.omniocular.handler;
 
-import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import me.exz.omniocular.util.LogHelper;
 import me.exz.omniocular.util.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,15 +10,12 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.HostAccess;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.script.*;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,22 +105,9 @@ public class JSHandler {
 
     //todo provide an function to detect player keyboard action. (hold shift, etc.)
     static void initEngine() {
-//        List<ScriptEngineFactory> engines = (new ScriptEngineManager()).getEngineFactories();
-//        for (ScriptEngineFactory f: engines) {
-//            System.out.println(f.getLanguageName()+" "+f.getEngineName()+" "+f.getNames().toString());
-//        }
-        ScriptEngineManager manager = new ScriptEngineManager();
-        engine = manager.getEngineByName("graal.js");
-        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        bindings.put("polyglot.js.allowHostAccess", true);
-        bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
-//        engine= GraalJSScriptEngine.create(null,
-//                Context.newBuilder("js")
-//                        .allowHostAccess(HostAccess.ALL)
-//                        .allowHostClassLookup(s -> true)
-////                        .option("js.ecmascript-version","2022")
-//        );
-        if (engine==null){
+        ScriptEngineManager manager = new ScriptEngineManager(JSHandler.class.getClassLoader());
+        engine = manager.getEngineByName("JavaScript");
+        if (engine == null) {
             LogHelper.fatal("no javascript engine");
         }
         setSpecialChar();
@@ -135,15 +118,14 @@ public class JSHandler {
             //e.printStackTrace();
         }
         try {
-            engine.eval("var _JSHandler = Java.type('me.exz.omniocular.handler.JSHandler');");
-            engine.eval("function translate(t){return _JSHandler.translate(t)}");
-            engine.eval("function translateFormatted(t,obj){return _JSHanlder.translateFormatted(t,obj)}");
-            engine.eval("function name(n){return _JSHandler.getDisplayName(n.hashCode)}");
-            engine.eval("function fluidName(n){return _JSHandler.getFluidName(n)}");
-            engine.eval("function holding(){return _JSHandler.playerHolding()}");
-            engine.eval("function armor(i){return _JSHandler.playerArmor(i)}");
-            engine.eval("function isInHotbar(n){return _JSHandler.haveItemInHotbar(n)}");
-            engine.eval("function isInInv(n){return _JSHandler.haveItemInInventory(n)}");
+            engine.eval("function translate(t){return Packages.me.exz.omniocular.handler.JSHandler.translate(t)}");
+            engine.eval("function translateFormatted(t,obj){return Packages.me.exz.omniocular.handler.JSHandler.translateFormatted(t,obj)}");
+            engine.eval("function name(n){return Packages.me.exz.omniocular.handler.JSHandler.getDisplayName(n.hashCode)}");
+            engine.eval("function fluidName(n){return Packages.me.exz.omniocular.handler.JSHandler.getFluidName(n)}");
+            engine.eval("function holding(){return Packages.me.exz.omniocular.handler.JSHandler.playerHolding()}");
+            engine.eval("function armor(i){return Packages.me.exz.omniocular.handler.JSHandler.playerArmor(i)}");
+            engine.eval("function isInHotbar(n){return Packages.me.exz.omniocular.handler.JSHandler.haveItemInHotbar(n)}");
+            engine.eval("function isInInv(n){return Packages.me.exz.omniocular.handler.JSHandler.haveItemInInventory(n)}");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
